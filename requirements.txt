@@ -2,3 +2,4 @@ fastapi
 boto3
 pyjwt
 botocore
+gunicorn

@@ -10,10 +10,11 @@ from models import Alarm, AuthDetails, User
 from resources.alarms import create_alarm, delete_alarm, get_alarm, get_alarms, update_alarm
 from resources.auth import authenticate
 from resources.users import add_user, delete_user, get_user, get_user_alarms, get_users, update_user
+from dotenv import load_dotenv
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
+load_dotenv()
 app = FastAPI()
 
 security_scheme = HTTPBearer()

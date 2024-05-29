@@ -8,18 +8,33 @@ from botocore.exceptions import ClientError
 from boto3.dynamodb.conditions import Key
 from fastapi import HTTPException
 
-SECRET_KEY = "g2K#Z!9W3n@0X$LqR5s*tp&Fb1DcEaH8"
+import logging
+
+AWS_ACCESS_KEY = os.environ.get("AWS_ACCESS_KEY_ID", "")
+AWS_SECRET_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", "")
+
+SECRET_KEY = os.environ.get("SECRET_KEY", "")
 ALGORITHM = "HS256"
 
 from models import AuthDetails
 
-dynamodb = boto3.resource('dynamodb', region_name='us-west-2')  # Set your region
+logger = logging.getLogger(__name__)
+
+dynamodb = boto3.resource('dynamodb',
+    aws_access_key_id=AWS_ACCESS_KEY,
+    aws_secret_access_key=AWS_SECRET_KEY,
+    region_name='us-west-2'
+)
 
 table = dynamodb.Table("Users")
 
 def authenticate(auth_details: AuthDetails):
+    logger.info(f"AWS_ACCESS_KEY: {AWS_ACCESS_KEY}")
+    logger.info(f"AWS_SECRET_KEY: {AWS_SECRET_KEY}")
     username_or_email = auth_details.username
     password = auth_details.password
+
+    logger.info(f"Authenticating user: {username_or_email}")
     try:
         # Query the DynamoDB Users table to find the user by username or email
         response = table.scan(
@@ -29,8 +44,12 @@ def authenticate(auth_details: AuthDetails):
                 ':e': username_or_email
             }
         )
+
+        logger.info(f"Response: {response}")
         if response['Count'] == 0:
             raise HTTPException(status_code=401, detail="Invalid credentials")
+        
+        logger.info(f"User found: {response['Items'][0]}")
 
         user = response['Items'][0]
 

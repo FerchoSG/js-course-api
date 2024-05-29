@@ -6,8 +6,15 @@ from datetime import datetime
 from botocore.exceptions import ClientError
 
 from models import Alarm
-dynamodb = boto3.resource('dynamodb', region_name='us-west-2')  # Set your region
 
+AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY_ID", "")
+AWS_SECRET_KEY = os.getenv("AWS_SECRET_ACCESS_KEY", "")
+
+dynamodb = boto3.resource('dynamodb',
+    aws_access_key_id=AWS_ACCESS_KEY,
+    aws_secret_access_key=AWS_SECRET_KEY,
+    region_name='us-west-2'
+)
 table = dynamodb.Table("Alarms")
 
 def create_alarm(alarm: Alarm):

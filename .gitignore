@@ -1,0 +1,5 @@
+.virtualenv
+packaged.yaml
+template.yaml
+template2.yaml
+.env

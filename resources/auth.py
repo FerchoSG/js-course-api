@@ -13,7 +13,7 @@ import logging
 AWS_ACCESS_KEY = os.environ.get("AWS_ACCESS_KEY_ID", "")
 AWS_SECRET_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", "")
 
-SECRET_KEY = os.environ.get("SECRET_KEY", "")
+SECRET_KEY = "g2K#Z!9W3n@0X$LqR5s*tp&Fb1DcEaH8"
 ALGORITHM = "HS256"
 
 from models import AuthDetails

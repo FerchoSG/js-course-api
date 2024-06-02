@@ -35,12 +35,16 @@ async def get_current_user(token: HTTPAuthorizationCredentials = Depends(securit
         payload = jwt.decode(token.credentials, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
 
-        if username is None:
-            logger.error(f"Invalid token: {payload}")
-            raise HTTPException(status_code=401, detail="Invalid token")
         return username
+    except jwt.ExpiredSignatureError as e:
+        logger.error(f"Token has expired -> {e}")
+        raise HTTPException(status_code=401, detail="Token has expired")
+
+    except jwt.InvalidTokenError as e:
+        logger.error(f"Invalid token -> {e}")
+        raise HTTPException(status_code=401, detail="Invalid token")
     except Exception as e:
-        logger.error(f"Error: {e} -> payload: {payload}")
+        logger.error(f"Error: {e}")
         raise HTTPException(status_code=401, detail="Invalid token")
 
 @app.get("/")

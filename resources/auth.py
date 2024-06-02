@@ -3,7 +3,7 @@ import boto3
 import os
 import hashlib
 import jwt
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from botocore.exceptions import ClientError
 from boto3.dynamodb.conditions import Key
 from fastapi import HTTPException
@@ -29,8 +29,6 @@ dynamodb = boto3.resource('dynamodb',
 table = dynamodb.Table("Users")
 
 def authenticate(auth_details: AuthDetails):
-    logger.info(f"AWS_ACCESS_KEY: {AWS_ACCESS_KEY}")
-    logger.info(f"AWS_SECRET_KEY: {AWS_SECRET_KEY}")
     username_or_email = auth_details.username
     password = auth_details.password
 
@@ -58,9 +56,12 @@ def authenticate(auth_details: AuthDetails):
         if verify_password(password, stored_hashed_password):
             # Set expiration time for the token (optional)
             expiration_time = datetime.now() + timedelta(days=1)
+            expiration_time_utc = expiration_time.astimezone(timezone.utc)
+            expiration_time_str = expiration_time_utc.strftime("%Y-%m-%d %H:%M:%S")
+            logger.info(f"Expiration Time (UTC) -> {expiration_time_str}")
 
             # Add expiration time to the data
-            user["iat"] = expiration_time
+            user["iat"] = expiration_time_utc
             user["sub"] = user['username']
 
             # Encode the data into a JWT token

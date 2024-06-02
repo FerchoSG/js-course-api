@@ -55,13 +55,12 @@ def authenticate(auth_details: AuthDetails):
         stored_hashed_password = user['password']
         if verify_password(password, stored_hashed_password):
             # Set expiration time for the token (optional)
-            expiration_time = datetime.now() + timedelta(days=1)
-            expiration_time_utc = expiration_time.astimezone(timezone.utc)
-            expiration_time_str = expiration_time_utc.strftime("%Y-%m-%d %H:%M:%S")
-            logger.info(f"Expiration Time (UTC) -> {expiration_time_str}")
+            current_time_utc = datetime.now(timezone.utc)
+            expiration_time_utc = current_time_utc + timedelta(days=1)
 
             # Add expiration time to the data
-            user["iat"] = expiration_time_utc
+            user["iat"] = current_time_utc
+            user["exp"] = expiration_time_utc
             user["sub"] = user['username']
 
             # Encode the data into a JWT token

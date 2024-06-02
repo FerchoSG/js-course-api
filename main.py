@@ -40,7 +40,7 @@ async def get_current_user(token: HTTPAuthorizationCredentials = Depends(securit
             raise HTTPException(status_code=401, detail="Invalid token")
         return username
     except Exception as e:
-        logger.error(f"Error: {e}")
+        logger.error(f"Error: {e} -> payload: {payload}")
         raise HTTPException(status_code=401, detail="Invalid token")
 
 @app.get("/")

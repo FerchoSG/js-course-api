@@ -57,7 +57,7 @@ def authenticate(auth_details: AuthDetails):
         stored_hashed_password = user['password']
         if verify_password(password, stored_hashed_password):
             # Set expiration time for the token (optional)
-            expiration_time = datetime.now() + timedelta(hours=1)
+            expiration_time = datetime.now() + timedelta(days=1)
 
             # Add expiration time to the data
             user["iat"] = expiration_time

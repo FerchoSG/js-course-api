@@ -19,7 +19,7 @@ app = FastAPI()
 
 security_scheme = HTTPBearer()
 
-SECRET_KEY = "g2K#Z!9W3n@0X$LqR5s*tp&Fb1DcEaH8"
+SECRET_KEY = os.environ.get("SECRET_KEY", "")
 ALGORITHM = "HS256"
 
 app.add_middleware(

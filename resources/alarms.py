@@ -7,6 +7,10 @@ from botocore.exceptions import ClientError
 
 from models import Alarm
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY_ID", "")
 AWS_SECRET_KEY = os.getenv("AWS_SECRET_ACCESS_KEY", "")
 
@@ -69,9 +73,12 @@ def get_alarm(alarm_id: str):
 
 def update_alarm(alarm_id: str, alarm: Alarm):
     try:
-        expression_attribute_values = {f":{k}": v for k, v in alarm.items()}
+        alarm_dict = alarm.dict()
+        expression_attribute_values = {f":{k}": v for k, v in alarm_dict.items()}
 
-        update_expression = "SET " + ", ".join(f"{k} = :{k}" for k in alarm.keys())
+        update_expression = "SET " + ", ".join(f"{k} = :{k}" for k in alarm_dict.keys())
+
+        logger.debug(f"Update expression: {update_expression}")
 
         table.update_item(
             Key={'alarm_id': alarm_id},

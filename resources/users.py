@@ -106,6 +106,8 @@ def update_user(user_id: str, user: User):
         username = user.username
         email = user.email
 
+        user_dict = user.dict()
+
         response = users_table.scan(
             FilterExpression='username = :u or email = :e',
             ExpressionAttributeValues={
@@ -120,9 +122,9 @@ def update_user(user_id: str, user: User):
                 'body': "Username or email already exists"
             }
 
-        update_expression = "SET " + ", ".join(f"#{k} = :{k}" for k in user.keys())
-        expression_attribute_names = {f"#{k}": k for k in user.keys()}
-        expression_attribute_values = {f":{k}": v for k, v in user.items()}
+        update_expression = "SET " + ", ".join(f"#{k} = :{k}" for k in user_dict.keys())
+        expression_attribute_names = {f"#{k}": k for k in user_dict.keys()}
+        expression_attribute_values = {f":{k}": v for k, v in user_dict.items()}
 
         print(f"Update expression: {update_expression}")
         print(f"Expression attribute names: {expression_attribute_names}")

@@ -63,7 +63,7 @@ def read_users(current_user: str = Depends(get_current_user)):
 def read_user(user_id: str, current_user: str = Depends(get_current_user)):
     return get_user(user_id)
 
-@app.get("/users/{user_id}/alarms", response_model=list[Alarm])
+@app.get("/users/{user_id}/alarms")
 def read_user(user_id: str, current_user: str = Depends(get_current_user)):
     return get_user_alarms(user_id)
 

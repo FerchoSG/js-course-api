@@ -6,6 +6,8 @@ from datetime import datetime
 from botocore.exceptions import ClientError
 from helpers.data_helper import generate_uuid
 from models import User
+from dotenv import load_dotenv
+load_dotenv()
 
 AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY_ID", "")
 AWS_SECRET_KEY = os.getenv("AWS_SECRET_ACCESS_KEY", "")

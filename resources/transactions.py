@@ -8,6 +8,8 @@ from botocore.exceptions import ClientError
 from models import Transaction
 
 import logging
+from dotenv import load_dotenv
+load_dotenv()
 
 logger = logging.getLogger(__name__)
 

@@ -1,5 +1,8 @@
-.env
-.virtualenv
 packaged.yaml
 template.yaml
 template2.yaml
+
+__pycache__/
+resources/__pycache__/.
+.env
+.virtualenv

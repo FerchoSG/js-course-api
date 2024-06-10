@@ -47,7 +47,7 @@ def authenticate(auth_details: AuthDetails):
         if response['Count'] == 0:
             raise HTTPException(status_code=401, detail="Invalid credentials")
         
-        logger.info(f"User found: {response['Items'][0]}")
+        logger.info(f"User found: {response}")
 
         user = response['Items'][0]
 
@@ -70,10 +70,7 @@ def authenticate(auth_details: AuthDetails):
             # remove password from the response
             user.pop('password')
             
-            return {
-                'statusCode': 200,
-                'body': user
-            }
+            return user
         else:
             raise HTTPException(status_code=401, detail="Invalid credentials")
     except ClientError as e:

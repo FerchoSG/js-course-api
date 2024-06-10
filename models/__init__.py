@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 # Assuming these models are for request bodies
 class User(BaseModel):
@@ -18,3 +18,28 @@ class Alarm(BaseModel):
 class AuthDetails(BaseModel):
     username: str
     password: str
+
+class Transaction(BaseModel):
+    user_id: str
+    transaction_id: str = Field(..., description="Este campo es auto generado")
+    amount: float
+    transaction_type: str
+    description: str
+    category: str
+
+class Category(BaseModel):
+    user_id: str
+    category_id: str = Field(str, description="Este campo es auto generado")
+    category_name: str
+    category_type: str
+
+class Withdrawal(BaseModel):
+    user_id: str
+    withdrawal_id: str = Field(str, description="Este campo es auto generado")
+    amount: float
+
+class Budget(BaseModel):
+    user_id: str
+    budget_id: str = Field(str, description="Este campo es auto generado")
+    category: str
+    amount: float

@@ -18,6 +18,10 @@ dynamodb = boto3.resource('dynamodb',
 
 users_table = dynamodb.Table("Users")
 alarms_table = dynamodb.Table("Alarms")
+transactions_table = dynamodb.Table("Transactions")
+withdrawals_table = dynamodb.Table("Withdrawals")
+budgets_table = dynamodb.Table("Budgets")
+categories_table = dynamodb.Table("Categories")
 
 def get_users():
     try:
@@ -57,6 +61,34 @@ def get_user_alarms(user_id):
             return data
         else:
             return "User not found"
+    except ClientError as e:
+        return str(e)
+    
+def get_user_transactions(user_id):
+    try:
+        response = transactions_table.scan(FilterExpression='user_id = :u', ExpressionAttributeValues={':u': user_id})
+        return response.get('Items', [])
+    except ClientError as e:
+        return str(e)
+    
+def get_user_budgets(user_id):
+    try:
+        response = budgets_table.scan(FilterExpression='user_id = :u', ExpressionAttributeValues={':u': user_id})
+        return response.get('Items', [])
+    except ClientError as e:
+        return str(e)
+    
+def get_user_categories(user_id):
+    try:
+        response = categories_table.scan(FilterExpression='user_id = :u', ExpressionAttributeValues={':u': user_id})
+        return response.get('Items', [])
+    except ClientError as e:
+        return str(e)
+    
+def get_user_withdrawals(user_id):
+    try:
+        response = withdrawals_table.scan(FilterExpression='user_id = :u', ExpressionAttributeValues={':u': user_id})
+        return response.get('Items', [])
     except ClientError as e:
         return str(e)
 

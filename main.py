@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from models import Alarm, AuthDetails, User, Budget, Transaction, Category, Withdrawal
 from resources.alarms import create_alarm, delete_alarm, get_alarm, get_alarms, update_alarm
 from resources.auth import authenticate
-from resources.users import add_user, delete_user, get_user, get_user_alarms, get_users, update_user
+from resources.users import add_user, delete_user, get_user, get_user_alarms, get_users, update_user, get_user_budgets, get_user_categories, get_user_transactions, get_user_withdrawals
 from resources.budgets import create_budget, get_budget, get_budgets, update_budget, delete_budget
 from resources.transactions import create_transaction, delete_transaction, get_transaction, get_transactions, update_transaction
 from resources.categories import create_category, delete_category, get_category, get_categories, update_category
@@ -69,19 +69,19 @@ def read_user(user_id: str, current_user: str = Depends(get_current_user)):
 
 @app.get("/users/{user_id}/transactions", response_model=list[Transaction])
 def read_user(user_id: str, current_user: str = Depends(get_current_user)):
-    return get_user_alarms(user_id)
+    return get_user_transactions(user_id)
 
 @app.get("/users/{user_id}/categories", response_model=list[Category])
 def read_user(user_id: str, current_user: str = Depends(get_current_user)):
-    return get_user_alarms(user_id)
+    return get_user_categories(user_id)
 
 @app.get("/users/{user_id}/budgets", response_model=list[Budget])
 def read_user(user_id: str, current_user: str = Depends(get_current_user)):
-    return get_user_alarms(user_id)
+    return get_user_budgets(user_id)
 
 @app.get("/users/{user_id}/withdrawals", response_model=list[Withdrawal])
 def read_user(user_id: str, current_user: str = Depends(get_current_user)):
-    return get_user_alarms(user_id)
+    return get_user_withdrawals(user_id)
 
 @app.post("/users", response_model=User)
 def create_user(user: User):

@@ -160,6 +160,11 @@ def modify_transaction(transaction_id: str, transaction: Transaction, current_us
 def remove_transaction(transaction_id: str, current_user: str = Depends(get_current_user)):
     return delete_transaction(transaction_id)
 
+
+@app.get("/categories/{category_type}/type")
+def read_category(category_type: str, current_user: str = Depends(get_current_user)):
+    return get_category_by_type(category_type)
+
 @app.get("/categories/{user_id}")
 def read_categories(user_id: str, current_user: str = Depends(get_current_user)):
     return get_categories(user_id)
@@ -167,10 +172,6 @@ def read_categories(user_id: str, current_user: str = Depends(get_current_user))
 @app.get("/categories/{category_id}")
 def read_category(category_id: str, current_user: str = Depends(get_current_user)):
     return get_category(category_id)
-
-@app.get("/categories/type/{category_type}")
-def read_category(category_type: str, current_user: str = Depends(get_current_user)):
-    return get_category_by_type(category_type)
 
 @app.post("/categories")
 def create_new_category(category: Category, current_user: str = Depends(get_current_user)):

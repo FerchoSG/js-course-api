@@ -11,6 +11,7 @@ import logging
 from dotenv import load_dotenv
 load_dotenv()
 
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY_ID", "")
@@ -28,15 +29,15 @@ def create_category(category: Category):
     try:
         category_id = str(uuid.uuid4())
         user_id = category.user_id
-        amount = category.amount
-        category = category.category
+        category_name = category.category_name
+        category_type = category.category_type
         created_at = datetime.now().isoformat()
 
         item = {
             'category_id': category_id,
             'user_id': user_id,
-            'category_name': amount,
-            'category_type': category,
+            'category_name': category_name,
+            'category_type': category_type.lower(),
             'created_at': created_at
         }
 
@@ -73,12 +74,10 @@ def get_category(category_id: str):
 
 def get_category_by_type(category_type: str):
     try:
-        response = table.get_item(Key={'category_type': category_type})
-        item = response.get('Item')
-        if item:
-            return item
-        else:
-            return {'message': 'Category not found'}
+        logger.info(f"Category type: {category_type}")
+        response = table.scan(FilterExpression='category_type = :u', ExpressionAttributeValues={':u': category_type.lower()})
+        logger.info(f"Response: {response}")
+        return response.get('Items', [])
     except Exception as e:
         return str(e)
 

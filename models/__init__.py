@@ -21,25 +21,22 @@ class AuthDetails(BaseModel):
 
 class Transaction(BaseModel):
     user_id: str
-    transaction_id: str = Field(..., description="Este campo es auto generado")
     amount: float
+    currency: str
     transaction_type: str
     description: str
     category: str
 
 class Category(BaseModel):
     user_id: str
-    category_id: str = Field(str, description="Este campo es auto generado")
     category_name: str
     category_type: str
 
 class Withdrawal(BaseModel):
     user_id: str
-    withdrawal_id: str = Field(str, description="Este campo es auto generado")
     amount: float
 
 class Budget(BaseModel):
     user_id: str
-    budget_id: str = Field(str, description="Este campo es auto generado")
     category: str
     amount: float

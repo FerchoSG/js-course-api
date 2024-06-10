@@ -31,6 +31,7 @@ def create_transaction(transaction: Transaction):
         transaction_id = str(uuid.uuid4())
         user_id = transaction.user_id
         amount = transaction.amount
+        currency = transaction.currency
         transaction_type = transaction.transaction_type
         description = transaction.description
         category = transaction.category

@@ -13,7 +13,7 @@ from resources.auth import authenticate
 from resources.users import add_user, delete_user, get_user, get_user_alarms, get_users, update_user, get_user_budgets, get_user_categories, get_user_transactions, get_user_withdrawals
 from resources.budgets import create_budget, get_budget, get_budgets, update_budget, delete_budget
 from resources.transactions import create_transaction, delete_transaction, get_transaction, get_transactions, update_transaction
-from resources.categories import create_category, delete_category, get_category, get_categories, update_category
+from resources.categories import create_category, delete_category, get_category, get_categories, get_category_by_type, update_category
 from resources.withdrawals import create_withdrawal, delete_withdrawal, get_withdrawal, get_withdrawals, update_withdrawal
 from dotenv import load_dotenv
 
@@ -167,6 +167,10 @@ def read_categories(user_id: str, current_user: str = Depends(get_current_user))
 @app.get("/categories/{category_id}")
 def read_category(category_id: str, current_user: str = Depends(get_current_user)):
     return get_category(category_id)
+
+@app.get("/categories/type/{category_type}")
+def read_category(category_type: str, current_user: str = Depends(get_current_user)):
+    return get_category_by_type(category_type)
 
 @app.post("/categories")
 def create_new_category(category: Category, current_user: str = Depends(get_current_user)):

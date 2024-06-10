@@ -71,6 +71,17 @@ def get_category(category_id: str):
     except Exception as e:
         return str(e)
 
+def get_category_by_type(category_type: str):
+    try:
+        response = table.get_item(Key={'category_type': category_type})
+        item = response.get('Item')
+        if item:
+            return item
+        else:
+            return {'message': 'Category not found'}
+    except Exception as e:
+        return str(e)
+
 def update_category(category_id: str, category: Category):
     try:
         category_dict = category.dict()

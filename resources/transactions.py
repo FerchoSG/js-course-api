@@ -42,6 +42,7 @@ def create_transaction(transaction: Transaction):
             'user_id': user_id,
             'amount': amount,
             'transaction_type': transaction_type,
+            'currency': currency,
             'description': description,
             'category': category,
             'created_at': created_at

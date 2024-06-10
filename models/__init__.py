@@ -1,4 +1,5 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from decimal import Decimal
 
 # Assuming these models are for request bodies
 class User(BaseModel):
@@ -21,7 +22,7 @@ class AuthDetails(BaseModel):
 
 class Transaction(BaseModel):
     user_id: str
-    amount: float
+    amount: Decimal
     currency: str
     transaction_type: str
     description: str
@@ -34,9 +35,9 @@ class Category(BaseModel):
 
 class Withdrawal(BaseModel):
     user_id: str
-    amount: float
+    amount: Decimal
 
 class Budget(BaseModel):
     user_id: str
     category: str
-    amount: float
+    amount: Decimal

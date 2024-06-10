@@ -7,6 +7,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from models import Alarm, AuthDetails, User, Budget, Transaction, Category, Withdrawal
+from models.responses import Response, TransactionResponse
 from resources.alarms import create_alarm, delete_alarm, get_alarm, get_alarms, update_alarm
 from resources.auth import authenticate
 from resources.users import add_user, delete_user, get_user, get_user_alarms, get_users, update_user, get_user_budgets, get_user_categories, get_user_transactions, get_user_withdrawals
@@ -55,11 +56,11 @@ async def get_current_user(token: HTTPAuthorizationCredentials = Depends(securit
 async def read_root():
     return {"message": "Health check passed!"}
 
-@app.get("/users", response_model=list[User])
+@app.get("/users")
 def read_users(current_user: str = Depends(get_current_user)):
     return get_users()
 
-@app.get("/users/{user_id}", response_model=User)
+@app.get("/users/{user_id}")
 def read_user(user_id: str, current_user: str = Depends(get_current_user)):
     return get_user(user_id)
 
@@ -71,47 +72,47 @@ def read_user(user_id: str, current_user: str = Depends(get_current_user)):
 def read_user(user_id: str, current_user: str = Depends(get_current_user)):
     return get_user_transactions(user_id)
 
-@app.get("/users/{user_id}/categories", response_model=list[Category])
+@app.get("/users/{user_id}/categories")
 def read_user(user_id: str, current_user: str = Depends(get_current_user)):
     return get_user_categories(user_id)
 
-@app.get("/users/{user_id}/budgets", response_model=list[Budget])
+@app.get("/users/{user_id}/budgets")
 def read_user(user_id: str, current_user: str = Depends(get_current_user)):
     return get_user_budgets(user_id)
 
-@app.get("/users/{user_id}/withdrawals", response_model=list[Withdrawal])
+@app.get("/users/{user_id}/withdrawals")
 def read_user(user_id: str, current_user: str = Depends(get_current_user)):
     return get_user_withdrawals(user_id)
 
-@app.post("/users", response_model=User)
+@app.post("/users")
 def create_user(user: User):
     return add_user(user)
 
-@app.put("/users/{user_id}", response_model=User)
+@app.put("/users/{user_id}")
 def modify_user(user_id: str, user: User, current_user: str = Depends(get_current_user)):
     return update_user(user_id, user)
 
-@app.delete("/users/{user_id}", response_model=User)
+@app.delete("/users/{user_id}")
 def remove_user(user_id: str, current_user: str = Depends(get_current_user)):
     return delete_user(user_id)
 
-@app.get("/alarms", response_model=list[Alarm])
+@app.get("/alarms")
 def read_alarms(current_user: str = Depends(get_current_user)):
     return get_alarms()
 
-@app.get("/alarms/{alarm_id}", response_model=Alarm)
+@app.get("/alarms/{alarm_id}")
 def read_alarm(alarm_id: str, current_user: str = Depends(get_current_user)):
     return get_alarm(alarm_id)
 
-@app.post("/alarms", response_model=Alarm)
+@app.post("/alarms")
 def create_new_alarm(alarm: Alarm, current_user: str = Depends(get_current_user)):
     return create_alarm(alarm)
 
-@app.put("/alarms/{alarm_id}", response_model=Alarm)
+@app.put("/alarms/{alarm_id}")
 def modify_alarm(alarm_id: str, alarm: Alarm, current_user: str = Depends(get_current_user)):
     return update_alarm(alarm_id, alarm)
 
-@app.delete("/alarms/{alarm_id}", response_model=Alarm)
+@app.delete("/alarms/{alarm_id}")
 def remove_alarm(alarm_id: str, current_user: str = Depends(get_current_user)):
     return delete_alarm(alarm_id)
 
@@ -119,83 +120,83 @@ def remove_alarm(alarm_id: str, current_user: str = Depends(get_current_user)):
 def authenticate_user(auth_details: AuthDetails):
     return authenticate(auth_details)
 
-@app.get("/budgets", response_model=list[Budget])
-def read_budgets(current_user: str = Depends(get_current_user)):
-    return get_budgets(current_user)
+@app.get("/budgets/{user_id}")
+def read_budgets(user_id: str, current_user: str = Depends(get_current_user)):
+    return get_budgets(user_id)
 
-@app.get("/budgets/{budget_id}", response_model=Budget)
+@app.get("/budgets/{budget_id}")
 def read_budget(budget_id: str, current_user: str = Depends(get_current_user)):
     return get_budget(budget_id)
 
-@app.post("/budgets", response_model=Budget)
+@app.post("/budgets")
 def create_new_budget(budget: Budget, current_user: str = Depends(get_current_user)):
     return create_budget(budget)
 
-@app.put("/budgets/{budget_id}", response_model=Budget)
+@app.put("/budgets/{budget_id}")
 def modify_budget(budget_id: str, budget: Budget, current_user: str = Depends(get_current_user)):
     return update_budget(budget_id, budget)
 
-@app.delete("/budgets/{budget_id}", response_model=Budget)
+@app.delete("/budgets/{budget_id}")
 def remove_budget(budget_id: str, current_user: str = Depends(get_current_user)):
     return delete_budget(budget_id)
 
-@app.get("/transactions", response_model=list[Transaction])
-def read_transactions(current_user: str = Depends(get_current_user)):
-    return get_transactions(current_user)
+@app.get("/transactions/{user_id}")
+def read_transactions(user_id: str, current_user: str = Depends(get_current_user)):
+    return get_transactions(user_id)
 
-@app.get("/transactions/{transaction_id}", response_model=Transaction)
+@app.get("/transactions/{transaction_id}")
 def read_transaction(transaction_id: str, current_user: str = Depends(get_current_user)):
     return get_transaction(transaction_id)
 
-@app.post("/transactions", response_model=Transaction)
-def create_new_transaction(transaction: Transaction, current_user: str = Depends(get_current_user)):
+@app.post("/transactions")
+def create_new_transaction(transaction: Transaction):
     return create_transaction(transaction)
 
-@app.put("/transactions/{transaction_id}", response_model=Transaction)
+@app.put("/transactions/{transaction_id}")
 def modify_transaction(transaction_id: str, transaction: Transaction, current_user: str = Depends(get_current_user)):
     return update_transaction(transaction_id, transaction)
 
-@app.delete("/transactions/{transaction_id}", response_model=Transaction)
+@app.delete("/transactions/{transaction_id}")
 def remove_transaction(transaction_id: str, current_user: str = Depends(get_current_user)):
     return delete_transaction(transaction_id)
 
-@app.get("/categories", response_model=list[Category])
-def read_categories(current_user: str = Depends(get_current_user)):
-    return get_categories(current_user)
+@app.get("/categories/{user_id}")
+def read_categories(user_id: str, current_user: str = Depends(get_current_user)):
+    return get_categories(user_id)
 
-@app.get("/categories/{category_id}", response_model=Category)
+@app.get("/categories/{category_id}")
 def read_category(category_id: str, current_user: str = Depends(get_current_user)):
     return get_category(category_id)
 
-@app.post("/categories", response_model=Category)
+@app.post("/categories")
 def create_new_category(category: Category, current_user: str = Depends(get_current_user)):
     return create_category(category)
 
-@app.put("/categories/{category_id}", response_model=Category)
+@app.put("/categories/{category_id}")
 def modify_category(category_id: str, category: Category, current_user: str = Depends(get_current_user)):
     return update_category(category_id, category)
 
-@app.delete("/categories/{category_id}", response_model=Category)
+@app.delete("/categories/{category_id}")
 def remove_category(category_id: str, current_user: str = Depends(get_current_user)):
     return delete_category(category_id)
 
-@app.get("/withdrawals", response_model=list[Withdrawal])
-def read_withdrawals(current_user: str = Depends(get_current_user)):
-    return get_withdrawals(current_user)
+@app.get("/withdrawals/{user_id}")
+def read_withdrawals(user_id: str, current_user: str = Depends(get_current_user)):
+    return get_withdrawals(user_id)
 
-@app.get("/withdrawals/{withdrawal_id}", response_model=Withdrawal)
+@app.get("/withdrawals/{withdrawal_id}")
 def read_withdrawal(withdrawal_id: str, current_user: str = Depends(get_current_user)):
     return get_withdrawal(withdrawal_id)
 
-@app.post("/withdrawals", response_model=Withdrawal)
+@app.post("/withdrawals")
 def create_new_withdrawal(withdrawal: Withdrawal, current_user: str = Depends(get_current_user)):
     return create_withdrawal(withdrawal)
 
-@app.put("/withdrawals/{withdrawal_id}", response_model=Withdrawal)
+@app.put("/withdrawals/{withdrawal_id}")
 def modify_withdrawal(withdrawal_id: str, withdrawal: Withdrawal, current_user: str = Depends(get_current_user)):
     return update_withdrawal(withdrawal_id, withdrawal)
 
-@app.delete("/withdrawals/{withdrawal_id}", response_model=Withdrawal)
+@app.delete("/withdrawals/{withdrawal_id}")
 def remove_withdrawal(withdrawal_id: str, current_user: str = Depends(get_current_user)):
     return delete_withdrawal(withdrawal_id)
 

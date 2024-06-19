@@ -30,14 +30,12 @@ def create_category(category: Category):
         category_id = str(uuid.uuid4())
         user_id = category.user_id
         category_name = category.category_name
-        category_type = category.category_type
         created_at = datetime.now().isoformat()
 
         item = {
             'category_id': category_id,
             'user_id': user_id,
             'category_name': category_name,
-            'category_type': category_type.lower(),
             'created_at': created_at
         }
 
@@ -72,14 +70,6 @@ def get_category(category_id: str):
     except Exception as e:
         return str(e)
 
-def get_category_by_type(category_type: str):
-    try:
-        logger.info(f"Category type: {category_type}")
-        response = table.scan(FilterExpression='category_type = :u', ExpressionAttributeValues={':u': category_type.lower()})
-        logger.info(f"Response: {response}")
-        return response.get('Items', [])
-    except Exception as e:
-        return str(e)
 
 def update_category(category_id: str, category: Category):
     try:

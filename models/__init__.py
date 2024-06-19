@@ -31,7 +31,6 @@ class Transaction(BaseModel):
 class Category(BaseModel):
     user_id: str
     category_name: str
-    category_type: str
 
 class Withdrawal(BaseModel):
     user_id: str

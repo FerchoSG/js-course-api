@@ -39,10 +39,10 @@ def get_user_total_funds(user_id: str):
 
 def create_withdrawal(withdrawal: Withdrawal):
     try:
-        user_funds = get_user_total_funds(withdrawal.user_id)
+        # user_funds = get_user_total_funds(withdrawal.user_id)
 
-        if withdrawal.amount > user_funds:
-            return {'message': 'Insufficient funds'}
+        # if withdrawal.amount > user_funds:
+        #     return {'message': 'Insufficient funds'}
 
         withdrawal_id = str(uuid.uuid4())
         user_id = withdrawal.user_id
@@ -89,10 +89,10 @@ def get_withdrawal(withdrawal_id: str):
 
 def update_withdrawal(withdrawal_id: str, withdrawal: Withdrawal):
     try:
-        user_funds = get_user_total_funds(withdrawal.user_id)
+        # user_funds = get_user_total_funds(withdrawal.user_id)
 
-        if withdrawal.amount > user_funds:
-            return {'message': 'Insufficient funds'}
+        # if withdrawal.amount > user_funds:
+        #     return {'message': 'Insufficient funds'}
         
         withdrawal_dict = withdrawal.dict()
         expression_attribute_values = {f":{k}": v for k, v in withdrawal_dict.items()}
